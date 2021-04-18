@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { Observable } from 'rxjs';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
@@ -18,8 +19,8 @@ export class CameraComponent implements OnInit {
   public multipleWebcamsAvailable = false;
   public deviceId: string;
   public videoOptions: MediaTrackConstraints = {
-    width: { ideal: 700 },
-    height: { ideal: 600 },
+    width: { ideal: 500 },
+    height: { ideal: 700 },
   };
   public errors: WebcamInitError[] = [];
   // webcam snapshot trigger
@@ -28,6 +29,9 @@ export class CameraComponent implements OnInit {
   private nextWebcam: Subject<boolean | string> = new Subject<
     boolean | string
   >();
+
+  constructor(private http: HttpClient) {}
+
   public ngOnInit(): void {
     WebcamUtil.getAvailableVideoInputs().then(
       (mediaDevices: MediaDeviceInfo[]) => {
@@ -35,6 +39,7 @@ export class CameraComponent implements OnInit {
       }
     );
   }
+
   public triggerSnapshot(): void {
     this.trigger.next();
   }
@@ -52,6 +57,7 @@ export class CameraComponent implements OnInit {
   }
   public handleImage(webcamImage: WebcamImage): void {
     console.log('received webcam image', webcamImage);
+    this.savePicture(webcamImage);
     this.pictureTaken.emit(webcamImage);
   }
   public cameraWasSwitched(deviceId: string): void {
@@ -68,4 +74,58 @@ export class CameraComponent implements OnInit {
   selectedSvg(svg) {
     this.svg = svg;
   }
+
+  savePicture(webcamImage: WebcamImage) {
+    const filename = new Date().getTime() + '.png';
+    console.log(filename);
+
+    this.http
+      .post(`https://p4d-convert-image.herokuapp.com`, {
+        filename,
+        base64Image: webcamImage.imageAsBase64,
+      })
+      .toPromise()
+      .then((res) => console.log(res))
+      .catch((error) => console.log(error));
+  }
+  // private async savePicture(webcamImage: WebcamImage) {
+  //   try {
+  //     const fileName = new Date().getTime() + '.jpeg';
+  //     console.log(webcamImage);
+
+  //     const teste = this.dataURItoBlob(webcamImage.imageAsDataUrl, fileName);
+
+  //     console.log(teste);
+
+  //     const savedFile = await Filesystem.writeFile({
+  //       path: fileName,
+  //       data: webcamImage.imageAsBase64,
+  //       directory: FilesystemDirectory.Data,
+  //     });
+
+  //     console.log(savedFile.uri);
+  //     console.log(savedFile);
+  //     // let mergedFileBase64 = null;
+  //     // mergeImages([savedFile.uri, this.svg]).then(
+  //     //   (b64) => (mergedFileBase64 = b64)
+  //     // );
+
+  //     // savedFile = await Filesystem.writeFile({
+  //     //   path: `merge${fileName}`,
+  //     //   data: mergedFileBase64,
+  //     //   directory: FilesystemDirectory.Data,
+  //     // });
+
+  //     //console.log(mergedFileBase64);
+
+  //     // Use webPath to display the new image instead of base64 since it's
+  //     // already loaded into memory
+  //     return {
+  //       filepath: fileName,
+  //       webviewPath: savedFile.uri,
+  //     };
+  //   } catch (error) {
+  //     alert(error);
+  //   }
+  // }
 }
