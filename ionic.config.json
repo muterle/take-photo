@@ -1,0 +1,7 @@
+{
+  "name": "take-photo",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

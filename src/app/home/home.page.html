@@ -1,0 +1,53 @@
+<ion-content>
+  <webcam
+    [trigger]="triggerObservable"
+    (imageCapture)="handleImage($event)"
+    (imageClick)="handleImageClick()"
+    [captureImageData]="captureImageData"
+    *ngIf="showWebcam"
+    [allowCameraSwitch]="allowCameraSwitch"
+    [switchCamera]="nextWebcamObservable"
+    [videoOptions]="videoOptions"
+    [imageQuality]="1"
+    (cameraSwitched)="cameraWasSwitched($event)"
+    (initError)="handleInitError($event)"
+  >
+  </webcam>
+  <img [src]="svg" />
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col size="3">
+        <ion-button
+          class="btn1"
+          (click)="selectedSvg('../../assets/background/purple.png')"
+          expand="block"
+        >
+        </ion-button>
+      </ion-col>
+      <ion-col size="3">
+        <ion-button
+          class="btn2"
+          (click)="selectedSvg('../../assets/background/blue.png')"
+          expand="block"
+        >
+        </ion-button>
+      </ion-col>
+      <ion-col size="3">
+        <ion-button
+          class="btn3"
+          (click)="selectedSvg('../../assets/background/red.png')"
+          expand="block"
+        >
+        </ion-button>
+      </ion-col>
+      <ion-col size="3">
+        <ion-button
+          class="btn4"
+          (click)="selectedSvg('../../assets/background/green.png')"
+          expand="block"
+        >
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
