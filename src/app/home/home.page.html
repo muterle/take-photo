@@ -7,12 +7,13 @@
     *ngIf="showWebcam"
     [allowCameraSwitch]="allowCameraSwitch"
     [switchCamera]="nextWebcamObservable"
-    [videoOptions]="videoOptions"
     [imageQuality]="1"
     (cameraSwitched)="cameraWasSwitched($event)"
     (initError)="handleInitError($event)"
   >
   </webcam>
+
+  <!-- [videoOptions]="videoOptions" -->
   <img [src]="svg" />
   <ion-grid fixed>
     <ion-row>

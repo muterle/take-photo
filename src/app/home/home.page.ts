@@ -11,7 +11,7 @@ import {
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { Observable, Subject } from 'rxjs';
 
-import * as mergeImages from 'merge-images';
+//import mergeImages from 'merge-images';
 
 @Component({
   selector: 'app-home',
@@ -21,7 +21,7 @@ import * as mergeImages from 'merge-images';
 export class HomePage implements OnInit {
   svg = '../../assets/background/purple.png';
   public showWebcam = true;
-  public allowCameraSwitch = true;
+  public allowCameraSwitch = false;
   public captureImageData = true;
   public multipleWebcamsAvailable = false;
   public deviceId: string;
@@ -125,7 +125,7 @@ export class HomePage implements OnInit {
 
       console.log(teste);
 
-      let savedFile = await Filesystem.writeFile({
+      const savedFile = await Filesystem.writeFile({
         path: fileName,
         data: webcamImage.imageAsBase64,
         directory: FilesystemDirectory.Data,
@@ -133,16 +133,16 @@ export class HomePage implements OnInit {
 
       console.log(savedFile.uri);
       console.log(savedFile);
-      const mergedFileBase64 = await mergeImages([
-        savedFile.uri,
-        this.svg,
-      ]).then((b64) => b64);
+      // const mergedFileBase64 = await mergeImages([
+      //   savedFile.uri,
+      //   this.svg,
+      // ]).then((b64) => b64);
 
-      savedFile = await Filesystem.writeFile({
-        path: `merge${fileName}`,
-        data: mergedFileBase64,
-        directory: FilesystemDirectory.Data,
-      });
+      // savedFile = await Filesystem.writeFile({
+      //   path: `merge${fileName}`,
+      //   data: mergedFileBase64,
+      //   directory: FilesystemDirectory.Data,
+      // });
 
       console.log(savedFile.uri);
 
