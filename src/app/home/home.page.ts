@@ -11,7 +11,7 @@ import {
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { Observable, Subject } from 'rxjs';
 
-//import mergeImages from 'merge-images';
+import * as mergeImages from 'merge-images';
 
 @Component({
   selector: 'app-home',
@@ -133,10 +133,10 @@ export class HomePage implements OnInit {
 
       console.log(savedFile.uri);
       console.log(savedFile);
-      // const mergedFileBase64 = await mergeImages([
-      //   savedFile.uri,
-      //   this.svg,
-      // ]).then((b64) => b64);
+      // let mergedFileBase64 = null;
+      // mergeImages([savedFile.uri, this.svg]).then(
+      //   (b64) => (mergedFileBase64 = b64)
+      // );
 
       // savedFile = await Filesystem.writeFile({
       //   path: `merge${fileName}`,
@@ -144,12 +144,12 @@ export class HomePage implements OnInit {
       //   directory: FilesystemDirectory.Data,
       // });
 
-      console.log(savedFile.uri);
+      //console.log(mergedFileBase64);
 
       // Use webPath to display the new image instead of base64 since it's
       // already loaded into memory
       return {
-        filepath: `merge${fileName}`,
+        filepath: fileName,
         webviewPath: savedFile.uri,
       };
     } catch (error) {
