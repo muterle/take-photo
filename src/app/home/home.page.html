@@ -2,7 +2,7 @@
   <!-- [videoOptions]="videoOptions" -->
   <ion-grid fixed>
     <ion-row>
-      <ion-col size="12">
+      <ion-col class="wrapper" size="12" (window:resize)="onResize($event)">
         <webcam
           [trigger]="triggerObservable"
           (imageCapture)="handleImage($event)"
@@ -12,6 +12,8 @@
           [allowCameraSwitch]="allowCameraSwitch"
           [switchCamera]="nextWebcamObservable"
           [imageQuality]="1"
+          [width]="width"
+          [height]="height"
           (cameraSwitched)="cameraWasSwitched($event)"
           (initError)="handleInitError($event)"
         >
@@ -54,4 +56,5 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+  <canvas #canvas></canvas>
 </ion-content>

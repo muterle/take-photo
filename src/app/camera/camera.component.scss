@@ -1,3 +1,17 @@
+.actionBtn {
+  font-size: 2em;
+  cursor: pointer;
+}
+.snapshot {
+  text-align: center;
+  img {
+    max-width: 800px;
+    max-height: 800px;
+  }
+}
+ul.links {
+  padding-bottom: 20px;
+}
 #container {
   text-align: center;
 
@@ -41,4 +55,10 @@ img {
 }
 .btn4 {
   --background: #008000ff;
+}
+.btn5 {
+  --background: #00008b;
+}
+.btn6 {
+  --background: #000000;
 }

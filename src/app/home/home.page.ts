@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 
 import {
   CameraResultType,
@@ -26,13 +26,16 @@ export class HomePage implements OnInit {
   public multipleWebcamsAvailable = false;
   public deviceId: string;
   public videoOptions: MediaTrackConstraints = {
-    width: { ideal: 500 },
-    height: { ideal: 700 },
+    width: { ideal: window.innerWidth },
+    height: { ideal: window.innerHeight },
   };
   public errors: WebcamInitError[] = [];
 
   // latest snapshot
   public webcamImage: WebcamImage = null;
+
+  width: number;
+  height: number;
 
   // webcam snapshot trigger
   private trigger: Subject<void> = new Subject<void>();
@@ -40,7 +43,16 @@ export class HomePage implements OnInit {
   private nextWebcam: Subject<boolean | string> = new Subject<
     boolean | string
   >();
-  constructor() {}
+  constructor() {
+    this.onResize();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event?: Event) {
+    const win = !!event ? (event.target as Window) : window;
+    this.width = win.innerWidth;
+    this.height = win.innerHeight;
+  }
 
   public ngOnInit(): void {
     WebcamUtil.getAvailableVideoInputs().then(
