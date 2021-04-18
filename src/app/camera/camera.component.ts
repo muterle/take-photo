@@ -7,6 +7,8 @@ import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 
 import { environment } from 'src/environments/environment';
 
+import axios from 'axios';
+
 @Component({
   selector: 'app-camera',
   templateUrl: './camera.component.html',
@@ -14,7 +16,7 @@ import { environment } from 'src/environments/environment';
 })
 export class CameraComponent implements OnInit {
   @Output()
-  svg = '../../assets/background/black.svg';
+  svg = '../../assets/background/black.png';
   color = 'black';
 
   public pictureTaken = new EventEmitter<WebcamImage>();
@@ -83,9 +85,8 @@ export class CameraComponent implements OnInit {
 
   async savePicture(webcamImage: WebcamImage) {
     const filename = new Date().getTime() + '.png';
-    console.log(filename);
 
-    await this.http
+    await axios
       .post(
         `${environment.urlBase}`,
         {
@@ -99,21 +100,43 @@ export class CameraComponent implements OnInit {
           },
         }
       )
-      .toPromise()
-      .then(async (res) => {
-        console.log(res);
-      })
-      .catch(() => {});
+      .then((res) => {
+        const byteCharacters = atob(res.data.split('base64,')[1]);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
 
-    await this.http
-      .get(`${environment.urlBase}/download`, {
-        headers: { responseType: 'blob' },
-        params: { filename },
-      })
-      .toPromise()
-      .then(async (res) => {
-        console.log(res);
-      })
-      .catch((error) => alert('error'));
+        const fileURL = window.URL.createObjectURL(
+          new Blob([byteArray], { type: 'image/png' })
+        );
+        const fileLink = document.createElement('a');
+
+        fileLink.href = fileURL;
+        fileLink.setAttribute('download', filename);
+        document.body.appendChild(fileLink);
+
+        fileLink.click();
+      });
+
+    //   await axios
+    //     .get(`${environment.urlBase}/download`, {
+    //       headers: { responseType: 'stream' },
+    //       params: { filename },
+    //     })
+    //     .then((response) => {
+    //       const fileURL = window.URL.createObjectURL(
+    //         new Blob([response.data], { type: response.headers['content-type'] })
+    //       );
+    //       const fileLink = document.createElement('a');
+
+    //       fileLink.href = fileURL;
+    //       fileLink.setAttribute('download', filename);
+    //       document.body.appendChild(fileLink);
+
+    //       fileLink.click();
+    //     })
+    //     .catch((error) => alert('error'));
   }
 }
