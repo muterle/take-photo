@@ -21,7 +21,7 @@ import * as mergeImages from 'merge-images';
 export class HomePage implements OnInit {
   svg = '../../assets/background/purple.png';
   public showWebcam = true;
-  public allowCameraSwitch = false;
+  public allowCameraSwitch = true;
   public captureImageData = true;
   public multipleWebcamsAvailable = false;
   public deviceId: string;
