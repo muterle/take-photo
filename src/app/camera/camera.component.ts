@@ -85,8 +85,11 @@ export class CameraComponent implements OnInit {
         base64Image: webcamImage.imageAsBase64,
       })
       .toPromise()
-      .then((res) => console.log(res))
-      .catch((error) => console.log(error));
+      .then((res) => {
+        alert(res);
+        return res;
+      })
+      .catch((error) => alert(error));
   }
   // private async savePicture(webcamImage: WebcamImage) {
   //   try {
